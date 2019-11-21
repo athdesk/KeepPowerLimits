@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [ $EUID != 0 ]; then
-    sudo "$0" "$@"
-    exit $?
-fi
-
 TMPFILE_PATH="/tmp/keepspeed"
 COMMAND="/Library/Application Support/VoltageShift/voltageshift"
 ARGS_UP="powerlimit 28.5 28 40 0.03"
@@ -15,7 +10,7 @@ setval=0
 daemonval=0
 
 usage() {
-	echo "Usage: keeplimits [-d] [-t <timeout>] [-s <up|down>] [-h]"
+	echo "Usage: keeplimits [-d] [-t <timeout>] [-s <up|down>] [-n] [-h]"
     echo "If no parameters are passed, the program will act as if only -d was passed"
     echo "This program works best if automatically run by root at startup"
 	echo "	[-d]: explicitly runs the daemon"
@@ -57,7 +52,7 @@ setpl() {
 }
 
 
-while getopts ":hs:t:d" opt; do
+while getopts ":hns:t:d" opt; do
 	case ${opt} in
 		t) timeout=${OPTARG}; daemonval=1;;
 		s) setval=${OPTARG};;
@@ -66,5 +61,11 @@ h | * | ?) usage;;
 	esac
 done
 
+if [ $EUID != 0 ]; then
+    sudo "$0" "$@"
+    exit $?
+fi
+
+touch $TMPFILE_PATH
 if ! [ "$setval" = "0" ]; then setpl $setval; fi
 if [ $# -eq 0 ] || [ $daemonval -eq 1 ]; then daemon; fi
