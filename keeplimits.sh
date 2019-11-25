@@ -11,12 +11,13 @@ daemonval=0
 
 usage() {
 	echo "Usage: keeplimits [-d] [-t <timeout>] [-s <up|down>] [-n] [-h]"
-    echo "If no parameters are passed, the program will act as if only -d was passed"
-    echo "This program works best if automatically run by root at startup"
 	echo "	[-d]: explicitly runs the daemon"
 	echo "	[-t]: sets the daemon timeout period in seconds (default = 30), and explicitely runs the daemon"
 	echo "	[-s]: sets and applies the specified setting"
 	echo "	[-h]: shows this help"
+	echo ""
+	echo "If no parameters are passed, the program will act as if only -d was passed"
+        echo "This program works best if automatically run by root at startup"
 	exit 0
 }
 
